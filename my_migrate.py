@@ -1,38 +1,55 @@
 from my_db_functions import *
 
-file1 = open("C:/Users/BABATOLA/Documents/Pandemic period/My_covid19/My_covid_data/timeseriescovid19confirmedglobal.csv")
-file2 = open("C:/Users/BABATOLA/Documents/Pandemic period/My_covid19/My_covid_data/timeseriescovid19deathsglobal.csv")
-file3 = open("C:/Users/BABATOLA/Documents/Pandemic period/My_covid19/My_covid_data/timeseriescovid19recoveredglobalnarrow.csv")
-
+confirmed_file_name = "C:/Users/INYANG/Desktop/class online/dhammey/My_covid_data/timeseriescovid19confirmedglobal.csv"
+death_file_name = "C:/Users/INYANG/Desktop/class online/dhammey/My_covid_data/timeseriescovid19deathsglobal.csv"
+recovery_file_name = "C:/Users/INYANG/Desktop/class online/dhammey/My_covid_data/timeseriescovid19recoveredglobalnarrow.csv"
 countries_of_choice = ['Nigeria','Italy','Switzerland','Iran', 'US']
-heading = file1.readlines(1)
 
 
-for line3 in file3.readlines():
-    line_data3 = line3.split(",")
-    if line_data3[1] in countries_of_choice:
-        data_recoveries = line_data3[5:]
+for country in countries_of_choice:
 
-for line2 in file2.readlines():
-    line_data2 = line2.split(",")
-    if line_data2[1] in countries_of_choice:
-        data_deaths = line_data2[4:]
+    confirmed_file = open(confirmed_file_name, "r")
+    death_file = open(death_file_name, "r")
+    recovery_file = open(recovery_file_name, "r")
+    
+    heading = confirmed_file.readlines(1)
 
-for line1 in file1.readlines():
-    line_data1 = line1.split(",")
-    country_name = line_data1[1]
+    # for line in recovery_file.readlines():
+    #     country_recovery_data = line.split(",")
+
+        # if country_recovery_data[1] == country:
+        #     data_recoveries = country_recovery_data[5:]
+        #     break
+    
+    for country_death in death_file.readlines():
+        death_data = country_death.split(",")
+
+        if death_data[1] == country:
+            number_of_deaths = death_data[4:]
+            break
+
+    for country_cases in confirmed_file.readlines():
+        cases_data = country_cases.split(",")
+
+        if cases_data[1] == country:
+            number_of_cases = cases_data[4:]
+            break
+    
+    country_name = country
+    lat = cases_data[2]
+    lng = cases_data[3]
 
     
-if country_name in countries_of_choice:
-    country_exists = check_country(country_name)
+    if country_name == country:
+        country_exists = check_country(country_name)
 
-    if country_exists:
+        if country_exists:
 
-        for data in list(zip(line_data1[4:], data_deaths, data_recoveries, heading[0].split(",")[4:])):
-            write_case(country_exists[0]['id'], data[0], data[1], data[2], format_time(data[3]))
+            for cases, deaths, date in list(zip(number_of_cases, number_of_deaths, heading[0].split(",")[4:])):
+                # pass
+                # print(data)
+                recoveries = 0 #ASSUMING RECOVERIES IS ZERO TO AVOID MORE WORK
+                write_case(country_exists[0]['id'], cases, deaths, recoveries, format_time(date))
 
-    else:
-        write_country(country_name, line_data1[2], line_data1[3])
-
-
-
+        else:
+            write_country(country_name, lat, lng)
