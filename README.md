@@ -16,4 +16,3 @@ Here are some guidelines to read through before using the app. • You must have
 
 • Kindly read thoroughly, each questions asked in the app so as to give a valid input/response.
 
-I hope you like it!
